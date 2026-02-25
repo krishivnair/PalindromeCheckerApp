@@ -12,3 +12,5 @@ Use Case 5: Stack-Based Palindrome Checker
 Use Case 6: Queue + Stack Based Palindrome Check
 
 Use Case 7: Deque-Based Optimized Palindrome Checker
+
+Use Case 8: Linked List Based Palindrome Checker
