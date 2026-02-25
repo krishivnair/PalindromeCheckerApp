@@ -6,12 +6,15 @@ public class PalindromeCheckerApp {
         String original = sc.nextLine();
         String cleanOriginal = original.replaceAll("\\s+", "").toLowerCase();
         Stack<Character> stack = new Stack<>();
+        Queue<Character> queue = new LinkedList<>();
         for (int i = 0; i < cleanOriginal.length(); i++) {
-            stack.push(cleanOriginal.charAt(i));
+            char c = cleanOriginal.charAt(i);
+            stack.push(c);
+            queue.add(c);
         }
         boolean isPalindrome = true;
-        for (int i = 0; i < cleanOriginal.length(); i++) {
-            if (stack.pop() != cleanOriginal.charAt(i)) {
+        while (!stack.isEmpty() && !queue.isEmpty()) {
+            if (stack.pop() != queue.remove()) {
                 isPalindrome = false;
                 break;
             }
