@@ -8,3 +8,5 @@ Use Case 3: Palindrome Check Using String Reverse
 Use Case 4: Character Array Based Palindrome Check
 
 Use Case 5: Stack-Based Palindrome Checker
+
+Use Case 6: Queue + Stack Based Palindrome Check
