@@ -5,17 +5,16 @@ public class PalindromeCheckerApp {
         Scanner sc = new Scanner(System.in);
         String original = sc.nextLine();
         String cleanOriginal = original.replaceAll("\\s+", "").toLowerCase();
-        char[] charArray = cleanOriginal.toCharArray();
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < cleanOriginal.length(); i++) {
+            stack.push(cleanOriginal.charAt(i));
+        }
         boolean isPalindrome = true;
-        int start = 0;
-        int end = charArray.length - 1;
-        while (start < end) {
-            if (charArray[start] != charArray[end]) {
+        for (int i = 0; i < cleanOriginal.length(); i++) {
+            if (stack.pop() != cleanOriginal.charAt(i)) {
                 isPalindrome = false;
                 break;
             }
-            start++;
-            end--;
         }
         System.out.println(isPalindrome);
         sc.close();
