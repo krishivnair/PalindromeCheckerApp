@@ -3,14 +3,20 @@ public class PalindromeCheckerApp {
     public static void main(String args[]) {
         System.out.println("Welcome to the Palindrome Checker App Management System");
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter a String to check for Palindrome: ");
         String original = sc.nextLine();
         String cleanOriginal = original.replaceAll("\\s+", "").toLowerCase();
-        String reversed = "";
-        for (int i = cleanOriginal.length() - 1; i >= 0; i--) {
-            reversed += cleanOriginal.charAt(i);
+        char[] charArray = cleanOriginal.toCharArray();
+        boolean isPalindrome = true;
+        int start = 0;
+        int end = charArray.length - 1;
+        while (start < end) {
+            if (charArray[start] != charArray[end]) {
+                isPalindrome = false;
+                break;
+            }
+            start++;
+            end--;
         }
-        boolean isPalindrome = cleanOriginal.equals(reversed);
         System.out.println(isPalindrome);
         sc.close();
     }
