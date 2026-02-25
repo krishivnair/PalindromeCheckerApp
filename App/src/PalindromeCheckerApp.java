@@ -5,16 +5,13 @@ public class PalindromeCheckerApp {
         Scanner sc = new Scanner(System.in);
         String original = sc.nextLine();
         String cleanOriginal = original.replaceAll("\\s+", "").toLowerCase();
-        Stack<Character> stack = new Stack<>();
-        Queue<Character> queue = new LinkedList<>();
+        Deque<Character> deque = new ArrayDeque<>();
         for (int i = 0; i < cleanOriginal.length(); i++) {
-            char c = cleanOriginal.charAt(i);
-            stack.push(c);
-            queue.add(c);
+            deque.addLast(cleanOriginal.charAt(i));
         }
         boolean isPalindrome = true;
-        while (!stack.isEmpty() && !queue.isEmpty()) {
-            if (stack.pop() != queue.remove()) {
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
                 isPalindrome = false;
                 break;
             }
