@@ -1,31 +1,61 @@
-package src;
-
 import java.util.*;
+
+/**
+ * UC11: Palindrome Checker App
+ * This single class handles both the User Interface and the Palindrome Logic.
+ */
 public class PalindromeCheckerApp {
-    public static boolean isPalindromeUC10(String input) {
-    if (input == null) return false;
 
-    // Step 1 & 2: Normalize (Lowercase and remove all non-alphanumeric characters)
-    // \\s matches whitespace, \\p{Punct} matches punctuation
-    // Alternatively, [^a-zA-Z0-9] matches everything NOT a letter or digit
-    String cleanString = input.toLowerCase().replaceAll("[^a-z0-9]", "");
+    /**
+     * UC11 Service Method: checkPalindrome
+     * Encapsulates the logic using Stack (LIFO) and Queue (FIFO) data structures.
+     */
+    public boolean checkPalindrome(String input) {
+        if (input == null || input.isEmpty()) return false;
 
-    // Step 3: Apply core logic (Two-pointer technique)
-    int left = 0;
-    int right = cleanString.length() - 1;
+        // Step 1: Normalize (Lowercase and remove whitespace)
+        String cleanStr = input.replaceAll("\\s+", "").toLowerCase();
 
-    while (left < right) {
-        if (cleanString.charAt(left) != cleanString.charAt(right)) {
-            return false;
+        // Step 2: Data Structures
+        Stack<Character> stack = new Stack<>();
+        Queue<Character> queue = new LinkedList<>();
+
+        // Step 3: Fill structures
+        // Stack reverses the order, Queue keeps the original order
+        for (char c : cleanStr.toCharArray()) {
+            stack.push(c);
+            queue.add(c);
         }
-        left++;
-        right--;
+
+        // Step 4: Compare
+        while (!stack.isEmpty()) {
+            // Character by character comparison (Backwards vs Forwards)
+            if (!stack.pop().equals(queue.remove())) {
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
-}
 
     public static void main(String[] args) {
-        String test = "A man, a plan, a canal: Panama";
-        System.out.println("Is Palindrome? " + isPalindromeUC10(test)); // Output: true
+        // Create an instance of the class to access the non-static method (OOPS)
+        PalindromeCheckerApp app = new PalindromeCheckerApp();
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("--- Welcome to the Palindrome Checker App (UC11) ---");
+
+        System.out.print("Enter text to check: ");
+        String userInput = sc.nextLine();
+
+        // Calling the encapsulated logic
+        boolean result = app.checkPalindrome(userInput);
+
+        if (result) {
+            System.out.println("Result: It is a Palindrome!");
+        } else {
+            System.out.println("Result: Not a Palindrome.");
+        }
+
+        sc.close();
     }
 }
