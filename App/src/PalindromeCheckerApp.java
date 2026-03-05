@@ -1,24 +1,53 @@
+package src;
+
 import java.util.*;
+
 public class PalindromeCheckerApp {
-    static boolean checkPalindrome(String str, int start, int end) {
-        if (start >= end) {
-            return true;
+
+    /**
+     * UC10: Case-Insensitive & Space-Ignored Palindrome Checker
+     * Uses Regular Expressions for normalization and Two-Pointer technique for efficiency.
+     */
+    public static boolean isPalindromeUC10(String input) {
+        if (input == null) return false;
+
+        // Step 1 & 2: Normalize
+        // .toLowerCase() handles case-insensitivity
+        // .replaceAll("[^a-z0-9]", "") removes everything except letters and numbers
+        String normalized = input.toLowerCase().replaceAll("[^a-z0-9]", "");
+
+        // If the string is empty after cleaning, it's technically a palindrome
+        if (normalized.isEmpty()) return true;
+
+        // Step 3: Apply core logic (Two-pointer technique)
+        int left = 0;
+        int right = normalized.length() - 1;
+
+        while (left < right) {
+            if (normalized.charAt(left) != normalized.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
         }
-        if (str.charAt(start) != str.charAt(end)) {
-            return false;
-        }
-        return checkPalindrome(str, start + 1, end - 1);
+        return true;
     }
-    public static void main(String args[]) {
-        System.out.println("Welcome to the Palindrome Checker App Management System");
-        Scanner sc = new Scanner(System.in);
-        String original = sc.nextLine();
-        String cleanOriginal = original.replaceAll("\\s+", "").toLowerCase();
-        boolean isPalindrome = true;
-        if (cleanOriginal.length() > 0) {
-            isPalindrome = checkPalindrome(cleanOriginal, 0, cleanOriginal.length() - 1);
-        }
-        System.out.println(isPalindrome);
-        sc.close();
+
+    public static void main(String[] args) {
+        // Test Case 1: Complex phrase with spaces and punctuation
+        String test1 = "A man, a plan, a canal: Panama";
+        System.out.println("Test 1 ('" + test1 + "'): " + isPalindromeUC10(test1));
+
+        // Test Case 2: Simple word with different cases
+        String test2 = "RaceCar";
+        System.out.println("Test 2 ('" + test2 + "'): " + isPalindromeUC10(test2));
+
+        // Test Case 3: Not a palindrome
+        String test3 = "Hello World";
+        System.out.println("Test 3 ('" + test3 + "'): " + isPalindromeUC10(test3));
+
+        // Test Case 4: Numbers and symbols
+        String test4 = "12321!!!";
+        System.out.println("Test 4 ('" + test4 + "'): " + isPalindromeUC10(test4));
     }
 }
