@@ -4,58 +4,65 @@ import java.util.*;
 
 /**
  * UC11: Palindrome Checker App
- * This single class handles both the User Interface and the Palindrome Logic.
+ * This class encapsulates the logic using OOPS principles.
  */
 public class PalindromeCheckerApp {
 
     /**
-     * UC11 Service Method: checkPalindrome
-     * Encapsulates the logic using Stack (LIFO) and Queue (FIFO) data structures.
+     * Service Method: checkPalindrome
+     * Uses a Stack (LIFO) and a Queue (FIFO) to check for symmetry.
      */
     public boolean checkPalindrome(String input) {
-        if (input == null || input.isEmpty()) return false;
+        // Handle null or empty cases
+        if (input == null || input.trim().isEmpty()) {
+            return false;
+        }
 
-        // Step 1: Normalize (Lowercase and remove whitespace)
-        String cleanStr = input.replaceAll("\\s+", "").toLowerCase();
+        // 1. Normalization: Remove all non-alphanumeric characters and lowercase
+        String cleanStr = input.toLowerCase().replaceAll("[^a-z0-9]", "");
 
-        // Step 2: Data Structures
+        // 2. Data Structures: Stack (Last-In-First-Out) and Queue (First-In-First-Out)
         Stack<Character> stack = new Stack<>();
         Queue<Character> queue = new LinkedList<>();
 
-        // Step 3: Fill structures
-        // Stack reverses the order, Queue keeps the original order
+        // 3. Populate both structures
         for (char c : cleanStr.toCharArray()) {
-            stack.push(c);
-            queue.add(c);
+            stack.push(c);   // Reverses the string
+            queue.add(c);    // Maintains original order
         }
 
-        // Step 4: Compare
+        // 4. Comparison Logic
         while (!stack.isEmpty()) {
-            // Character by character comparison (Backwards vs Forwards)
+            // Comparing the character from the end (Stack) with the character from the start (Queue)
             if (!stack.pop().equals(queue.remove())) {
-                return false;
+                return false; // Not a palindrome
             }
         }
-        return true;
+
+        return true; // All characters matched
     }
 
     public static void main(String[] args) {
-        // Create an instance of the class to access the non-static method (OOPS)
+        // Create an instance of the class (Object-Oriented Approach)
         PalindromeCheckerApp app = new PalindromeCheckerApp();
-
         Scanner sc = new Scanner(System.in);
-        System.out.println("--- Welcome to the Palindrome Checker App (UC11) ---");
 
-        System.out.print("Enter text to check: ");
-        String userInput = sc.nextLine();
+        System.out.println("=== Palindrome Checker App: UC11 (OOPS) ===");
+        System.out.print("Enter text to validate: ");
 
-        // Calling the encapsulated logic
-        boolean result = app.checkPalindrome(userInput);
+        if (sc.hasNextLine()) {
+            String userInput = sc.nextLine();
 
-        if (result) {
-            System.out.println("Result: It is a Palindrome!");
-        } else {
-            System.out.println("Result: Not a Palindrome.");
+            // Calling the service method
+            boolean result = app.checkPalindrome(userInput);
+
+            // Display results
+            System.out.println("\nAnalyzing: \"" + userInput + "\"");
+            if (result) {
+                System.out.println("SUCCESS: This is a valid palindrome.");
+            } else {
+                System.out.println("FAILURE: This is NOT a palindrome.");
+            }
         }
 
         sc.close();
