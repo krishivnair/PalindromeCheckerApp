@@ -1,69 +1,104 @@
-package src;
-
 import java.util.*;
 
 /**
- * UC11: Palindrome Checker App
- * This class encapsulates the logic using OOPS principles.
+ * UC12: PalindromeStrategy Interface
+ * Defines the contract for all palindrome checking algorithms.
  */
-public class PalindromeCheckerApp {
+interface PalindromeStrategy {
+    boolean isValid(String input);
+}
 
-    /**
-     * Service Method: checkPalindrome
-     * Uses a Stack (LIFO) and a Queue (FIFO) to check for symmetry.
-     */
-    public boolean checkPalindrome(String input) {
-        // Handle null or empty cases
-        if (input == null || input.trim().isEmpty()) {
-            return false;
-        }
+/**
+ * Strategy 1: StackStrategy (LIFO)
+ * Uses a Stack to reverse the string for comparison.
+ */
+class StackStrategy implements PalindromeStrategy {
+    @Override
+    public boolean isValid(String input) {
+        if (input == null) return false;
+        String clean = input.toLowerCase().replaceAll("[^a-z0-9]", "");
 
-        // 1. Normalization: Remove all non-alphanumeric characters and lowercase
-        String cleanStr = input.toLowerCase().replaceAll("[^a-z0-9]", "");
-
-        // 2. Data Structures: Stack (Last-In-First-Out) and Queue (First-In-First-Out)
         Stack<Character> stack = new Stack<>();
-        Queue<Character> queue = new LinkedList<>();
-
-        // 3. Populate both structures
-        for (char c : cleanStr.toCharArray()) {
-            stack.push(c);   // Reverses the string
-            queue.add(c);    // Maintains original order
+        for (char c : clean.toCharArray()) {
+            stack.push(c);
         }
 
-        // 4. Comparison Logic
+        StringBuilder reversed = new StringBuilder();
         while (!stack.isEmpty()) {
-            // Comparing the character from the end (Stack) with the character from the start (Queue)
-            if (!stack.pop().equals(queue.remove())) {
-                return false; // Not a palindrome
+            reversed.append(stack.pop());
+        }
+
+        return clean.equals(reversed.toString());
+    }
+}
+
+/**
+ * Strategy 2: DequeStrategy (Double-Ended Queue)
+ * More efficient: compares characters from both ends simultaneously.
+ */
+class DequeStrategy implements PalindromeStrategy {
+    @Override
+    public boolean isValid(String input) {
+        if (input == null) return false;
+        String clean = input.toLowerCase().replaceAll("[^a-z0-9]", "");
+
+        Deque<Character> deque = new LinkedList<>();
+        for (char c : clean.toCharArray()) {
+            deque.add(c);
+        }
+
+        while (deque.size() > 1) {
+            // Remove from front and back and compare
+            if (!deque.removeFirst().equals(deque.removeLast())) {
+                return false;
             }
         }
+        return true;
+    }
+}
 
-        return true; // All characters matched
+/**
+ * UC12: Context Class (The Main App)
+ * Demonstrates Strategy Injection and Polymorphism.
+ */
+public class PalindromeCheckerApp {
+    private PalindromeStrategy strategy;
+
+    // Method to set strategy at runtime (Polymorphism)
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean executeCheck(String text) {
+        if (strategy == null) {
+            System.out.println("Strategy not set!");
+            return false;
+        }
+        return strategy.isValid(text);
     }
 
     public static void main(String[] args) {
-        // Create an instance of the class (Object-Oriented Approach)
         PalindromeCheckerApp app = new PalindromeCheckerApp();
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("=== Palindrome Checker App: UC11 (OOPS) ===");
-        System.out.print("Enter text to validate: ");
+        System.out.println("=== UC12: Strategy Pattern System ===");
+        System.out.print("Enter text: ");
+        String text = sc.nextLine();
 
-        if (sc.hasNextLine()) {
-            String userInput = sc.nextLine();
+        System.out.println("Select Algorithm: [1] Stack Strategy | [2] Deque Strategy");
+        int choice = sc.nextInt();
 
-            // Calling the service method
-            boolean result = app.checkPalindrome(userInput);
-
-            // Display results
-            System.out.println("\nAnalyzing: \"" + userInput + "\"");
-            if (result) {
-                System.out.println("SUCCESS: This is a valid palindrome.");
-            } else {
-                System.out.println("FAILURE: This is NOT a palindrome.");
-            }
+        // Runtime Strategy Injection
+        if (choice == 1) {
+            app.setStrategy(new StackStrategy());
+            System.out.println("Applying Stack Algorithm...");
+        } else {
+            app.setStrategy(new DequeStrategy());
+            System.out.println("Applying Deque Algorithm...");
         }
+
+        boolean result = app.executeCheck(text);
+        System.out.println("Is Palindrome: " + result);
 
         sc.close();
     }
